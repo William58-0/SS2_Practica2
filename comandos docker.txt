@@ -47,14 +47,14 @@ mkdir ~/input
 mkdir ~/output
 
 ---------------------------------------------------- ARCHIVO CORREOS.TXT
--- copiar archivo Correos.txt a carpeta de entrada
+-- COPIAR ARCHIVO Correos.txt A CARPETA DE ENTRADA
 cp 201909103_Practica2/Correos.txt ~/input
 ls ~/input
 
--- copiar Correos.txt en el sistema de archivos de Hadoop
+-- COPIAR Correos.txt EN EL SISTEMA DE ARCHIVOS DE HADOOP
 ${HADOOP_HOME}/bin/hdfs dfs -copyFromLocal ~/input /
 
--- verificar archivos copiados
+-- VERIFICAR ARCHIVOS COPIADOS
 ${HADOOP_HOME}/bin/hdfs dfs -ls /input
 
 -- DESDE LA CARPETA "201909103_Practica2" QUE TIENE LOS ARCHIVOS
@@ -95,14 +95,14 @@ ${HADOOP_HOME}/bin/hdfs dfs -rm -R -skipTrash /output
 ${HADOOP_HOME}/bin/hdfs dfs -rm -skipTrash /input/*
 
 ---------------------------------------------------- ARCHIVO PUNTUACION.TXT
--- copiar archivo Puntuacion.txt a carpeta de entrada
+-- COPIAR ARCHIVO Puntuacion.txt A CARPETA DE ENTRADA
 cp 201909103_Practica2/Puntuacion.txt ~/input
 ls ~/input
 
--- copiar Puntuacion.txt en el sistema de archivos de Hadoop
+-- COPIAR Puntuacion.txt EN EL SISTEMA DE ARCHIVOS DE HADOOP
 ${HADOOP_HOME}/bin/hdfs dfs -copyFromLocal ~/input /
 
--- verificar archivos copiados
+-- VERIFICAR ARCHIVOS COPIADOS
 ${HADOOP_HOME}/bin/hdfs dfs -ls /input
 
 -- DESDE LA CARPETA "201909103_Practica2" QUE TIENE LOS ARCHIVOS
