@@ -1,0 +1,25 @@
+
+
+-- CORRER CONTENEDOR(CMD)
+docker run --rm -it -v hadoop:/source -p 50070-50080:50070-50080 sequenceiq/hadoop-docker /etc/bootstrap.sh -bash
+
+-- en el contenedor de hadoop
+mkdir Ejemplo
+
+-- COPIAR ARCHIVO DE ENTRADA(CMD)
+docker cp C:\Users\William\Desktop\PRACTICA_SEMI2\entrada.txt competent_merkle:/Ejemplo
+
+
+... luego habrá que pasar un archivo de java(CMD)
+
+
+-- en el contenedor de hadoop
+export HADOOP_HOME=/usr/local/hadoop
+
+export CLASSPATH="$HADOOP_HOME/share/hadoop/mapreduce/hadoop-\
+mapreduce-client-core-2.7.0.jar:$HADOOP_HOME/share/hadoop/mapreduce/hadoop-\
+mapreduce-client-common-2.7.0.jar:$HADOOP_HOME/share/hadoop/common/hadoop-\
+common-2.7.0.jar:/[Nombre Carpeta]/*:$HADOOP_HOME/lib/*"
+
+cd Ejemplo
+
