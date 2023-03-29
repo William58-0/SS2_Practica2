@@ -1,3 +1,8 @@
+--- EJECUTAR CONTENEDOR
+docker start hadoop
+docker exec -it hadoop bash
+
+
 --------------------------- COMANDOS DOCKER ------------------------------
 -- DESCARGAR IMAGEN (CMD)
 docker pull sequenceiq/hadoop-docker
@@ -24,7 +29,9 @@ common-2.7.0.jar:/[Nombre Carpeta]/*:$HADOOP_HOME/lib/*"
 
 -- DESDE LA CARPETA "201909103_Practica2" QUE TIENE LOS ARCHIVOS
 -- compilar el .java
+cd 201909103_Practica2
 javac -d . WordCount.java
+cd ..
 
 -- COMANDO PARA CREAR EL MANIFEST
 cat > Manifest.txt
@@ -39,9 +46,50 @@ jar cfm WordCount.jar Manifest.txt *.class
 mkdir ~/input
 mkdir ~/output
 
----- COMANDOOO PENDIENTEEEE
--- copiar archivo de entrada a carpeta de entrada
-cp Reviews.txt ~/input
+---------------------------------------------------- ARCHIVO CORREOS.TXT
+-- copiar archivo Correos.txt a carpeta de entrada
+cp 201909103_Practica2/Correos.txt ~/input
+ls ~/input
+
+-- copiar Correos.txt en el sistema de archivos de Hadoop
+${HADOOP_HOME}/bin/hdfs dfs -copyFromLocal ~/input /
+
+-- verificar archivos copiados
+${HADOOP_HOME}/bin/hdfs dfs -ls /input
+
+-- DESDE LA CARPETA "201909103_Practica2" QUE TIENE LOS ARCHIVOS
+-- realizar conteo de palabras
+cd 201909103_Practica2
+${HADOOP_HOME}/bin/hadoop jar WordCount.jar WordCount /input/Correos.txt /output
+cd ..
+
+-- VER ARCHIVOS DE SALIDA
+${HADOOP_HOME}/bin/hdfs dfs -ls /output
+
+-- VER ARCHIVO DE SALIDA
+${HADOOP_HOME}/bin/hdfs dfs -cat /output/part-r-00000
+
+-- RENOMBRAR EL ARCHIVO DE SALIDA DE CONTEO
+${HADOOP_HOME}/bin/hdfs dfs -mv /output/part-r-00000 /output/Resultado_Correos.txt
+
+-- VER ARCHIVO RENOMBRADO
+${HADOOP_HOME}/bin/hdfs dfs -cat /output/Resultado_Correos.txt
+
+-- COPIAR ARCHIVO A CARPETA OUTPUT DEL HOME DEL USUARIO ROOT
+${HADOOP_HOME}/bin/hdfs dfs -copyToLocal /output/Resultado_Correos.txt ~/output
+
+-- COPIAR ARCHIVO RESULTADO A CARPETA DE ARCHIVOS EN EL CONTENEDOR
+mkdir Salidas       ## si es que no existe
+cp ~/output/Resultado_Correos.txt /Salidas
+
+-- COPIAR ARCHIVO A LA PC (CMD)
+docker cp hadoop:Salidas/Resultado_Correos.txt ^
+"C:\Users\William\Desktop\PRACTICA_SEMI2\Salidas"
+
+rm ~/output/*
+
+
+
 
 
 
