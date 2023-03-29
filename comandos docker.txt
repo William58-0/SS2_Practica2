@@ -86,8 +86,53 @@ cp ~/output/Resultado_Correos.txt /Salidas
 docker cp hadoop:Salidas/Resultado_Correos.txt ^
 "C:\Users\William\Desktop\PRACTICA_SEMI2\Salidas"
 
+
+---------------------------------------------------- REMOVER ARCHIVOS DE PROCESO ANTERIOR
+rm ~/input/*
 rm ~/output/*
 
+${HADOOP_HOME}/bin/hdfs dfs -rm -R -skipTrash /output
+${HADOOP_HOME}/bin/hdfs dfs -rm -skipTrash /input/*
+
+---------------------------------------------------- ARCHIVO PUNTUACION.TXT
+-- copiar archivo Puntuacion.txt a carpeta de entrada
+cp 201909103_Practica2/Puntuacion.txt ~/input
+ls ~/input
+
+-- copiar Puntuacion.txt en el sistema de archivos de Hadoop
+${HADOOP_HOME}/bin/hdfs dfs -copyFromLocal ~/input /
+
+-- verificar archivos copiados
+${HADOOP_HOME}/bin/hdfs dfs -ls /input
+
+-- DESDE LA CARPETA "201909103_Practica2" QUE TIENE LOS ARCHIVOS
+-- realizar conteo de palabras
+cd 201909103_Practica2
+${HADOOP_HOME}/bin/hadoop jar WordCount.jar WordCount /input/Puntuacion.txt /output
+cd ..
+
+-- VER ARCHIVOS DE SALIDA
+${HADOOP_HOME}/bin/hdfs dfs -ls /output
+
+-- VER ARCHIVO DE SALIDA
+${HADOOP_HOME}/bin/hdfs dfs -cat /output/part-r-00000
+
+-- RENOMBRAR EL ARCHIVO DE SALIDA DE CONTEO
+${HADOOP_HOME}/bin/hdfs dfs -mv /output/part-r-00000 /output/Resultado_Puntuacion.txt
+
+-- VER ARCHIVO RENOMBRADO
+${HADOOP_HOME}/bin/hdfs dfs -cat /output/Resultado_Puntuacion.txt
+
+-- COPIAR ARCHIVO A CARPETA OUTPUT DEL HOME DEL USUARIO ROOT
+${HADOOP_HOME}/bin/hdfs dfs -copyToLocal /output/Resultado_Puntuacion.txt ~/output
+
+-- COPIAR ARCHIVO RESULTADO A CARPETA DE ARCHIVOS EN EL CONTENEDOR
+mkdir Salidas       ## si es que no existe
+cp ~/output/Resultado_Puntuacion.txt /Salidas
+
+-- COPIAR ARCHIVO A LA PC (CMD)
+docker cp hadoop:Salidas/Resultado_Puntuacion.txt ^
+"C:\Users\William\Desktop\PRACTICA_SEMI2\Salidas"
 
 
 
